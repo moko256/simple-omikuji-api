@@ -1,13 +1,3 @@
-/**
- * Welcome to Cloudflare Workers! This is your first worker.
- *
- * - Run `npm run dev` in your terminal to start a development server
- * - Open a browser tab at http://localhost:8787/ to see your worker in action
- * - Run `npm run deploy` to publish your worker
- *
- * Learn more at https://developers.cloudflare.com/workers/
- */
-
 export interface Env {
 	// Example binding to KV. Learn more at https://developers.cloudflare.com/workers/runtime-apis/kv/
 	// MY_KV_NAMESPACE: KVNamespace;
@@ -25,8 +15,22 @@ export interface Env {
 	// MY_QUEUE: Queue;
 }
 
+interface Omikuji {
+	title: string,
+	description: string,
+}
+
+const omikujis: Omikuji[] = [
+	{ title: "末吉", description: "うっかりミスに注意" },
+	{ title: "小吉", description: "息抜きしよう" },
+	{ title: "中吉", description: "何か良いことがあるかも" },
+	{ title: "吉", description: "大変めでたい" },
+	{ title: "大吉", description: "おめでとうございます！！！" },
+]
+
 export default {
-	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-		return new Response('Hello World!');
+	async fetch(_request: Request, _env: Env, _ctx: ExecutionContext): Promise<Response> {
+		const result = omikujis[Math.min(Math.floor(Math.random() * omikujis.length), omikujis.length)];
+		return Response.json(result);
 	},
 };
